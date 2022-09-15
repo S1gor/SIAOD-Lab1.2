@@ -1,4 +1,14 @@
 #include <iostream>
+#include <string>
+
+/*Имеется файл с текстом на русском языке.Дать варианты переноса всех слов.Перенос возможен по следующим правилам :
+1) переносятся либо остаются в конце строки не менее двух символов;
+2) невозможен перенос перед буквами 'ь' и 'ъ';
+3) слово должно иметь не менее двух слогов;
+4) в оставшейся и переносимой частях слова должны быть гласные буквы.*/
+
+char SOUNDS[] = "ъь";
+char VOWELS[] = "аеиоуыэюя";	
 
 void ReadFile(const char* filename, char* str)
 {
@@ -14,54 +24,42 @@ void ReadFile(const char* filename, char* str)
 	fclose(file);
 }
 
-void TransferWord(char* str)
+bool isVowels(char* mas)
+{
+	int len = strlen(mas);
+	for (int i = 0; i <= len; i++)
+		for (int j = 0; j <= 9; j++)
+			return (mas[i] == VOWELS[j]) ? false : true;
+}
+
+
+void HyphenationWord(char* str)
 {
 	char mas[20];
-	//char* s1 = str;
-	//char* s2 = strchr(str, ' ');
-	//// Знак + точка
-	//while (s1 != NULL && s2 != NULL)
-	//{
-	//	if (s2 - s1 <= 0)
-	//	{
-	//		s1 = s2 + 1;
-	//		s2 = strchr(s2 + 1, ' ');
-	//		continue;
-	//	}
 
-	//	strncpy_s(mas, s1, s2 - s1);
-	//	printf("%s\n", mas);	
-
-
-	//	s1 = s2 + 1;
-	//	s2 = strchr(s2 + 1, ' ');
-	//}
-	//if (s2 == NULL)
-	//{
-	//	strncpy_s(mas, s1, s2 - s1);
-	//	printf("%s\n", mas);
-	//}
-	int n = 0;
+	int number = 0;
 	int len = strlen(str);
 	for (int i = 0; i <= len; i++)
 	{
-		mas[n] = str[i];
-		if ((str[i] == ' ' || str[i] == ',') && (str[i + 1] == ' ' || str[i + 1] == '\0'))
+		mas[number] = str[i];
+		if ((str[i] == ' ' || str[i] == ',' || str[i] == '.') && (str[i + 1] == ' ' || str[i + 1] == ',' || str[i + 1] == '.' || str[i + 1] == '\0'))
 			continue;
 		if (str[i] == ' ' || str[i] == ',' || str[i] == '.' || str[i] == '\0')
 		{
-			mas[n] = '\0';
+			mas[number] = '\0';
 
 			printf("%s\n", mas);
 
 
 
-			for (int j = 0; j < n; j++)
+
+
+			for (int j = 0; j < number; j++)
 				mas[j] = ' ';
-			n = 0;
+			number = 0;
 			continue;
 		}
-		n++;
+		number++;
 	}
 }
 
@@ -69,12 +67,12 @@ int main()
 {
 	system("chcp 1251"); system("cls");
 
-	const int amountEl = 100;
+	const int amountEl = 256;
 	char str[amountEl];
 	char filename[] = "1.txt";
 
 	ReadFile(filename, str);
-	TransferWord(str);
+	HyphenationWord(str);
 	 
 
 	return 0;
