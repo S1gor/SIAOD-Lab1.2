@@ -7,9 +7,9 @@
 3) סכמגמ המכזםמ טלועü םו לוםוו הגףץ סכמדמג;
 4) ג מסעאגרויסÿ ט ןונוםמסטלמי קאסעÿץ סכמגא המכזםû בûעü דכאסםûו בףךגû.*/
 
-char SOUNDS[] = "תü";
+char SOUNDS[] = "תüי";
 char VOWELS[] = "או¸טמףû‎‏ÿ";
-char CONSONANTS[] = "בגדהזחיךכלםןנסעפץצקרש";
+char CONSONANTS[] = "בגדהזחךכלםןנסעפץצקרש";
 
 void ReadFile(const char* filename, char* str)
 {
@@ -37,7 +37,7 @@ bool isVowels(char symbol)
 bool isConsonants(char symbol)
 {
 	bool flag = false;
-	for (int i = 0; i < 21; i++)
+	for (int i = 0; i < 20; i++)
 		if (symbol == CONSONANTS[i])
 			flag = true;
 	return flag ? true : false;
@@ -46,10 +46,22 @@ bool isConsonants(char symbol)
 bool isSound(char symbol)
 {
 	bool flag = false;
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 3; i++)
 		if (symbol == SOUNDS[i])
 			flag = true;
 	return flag ? true : false;
+}
+
+bool vowelInTheRemainingPart(char* word, int pos)
+{
+	bool flag = false;
+	for (pos; word[pos] != '\0'; pos++)
+	{
+		for (int i = 0; i < 10; i++)
+			if (word[pos] == VOWELS[i]);
+				flag = true;
+		return flag ? true : false;
+	}
 }
 
 void HyphenationWord(char* str)
@@ -57,6 +69,7 @@ void HyphenationWord(char* str)
 	char word[20];
 
 	int number = 0;
+	int counter = 0;
 	int len = strlen(str);
 	for (int i = 0; i <= len; i++)
 	{
@@ -66,15 +79,47 @@ void HyphenationWord(char* str)
 		if (str[i] == ' ' || str[i] == ',' || str[i] == '.' || str[i] == '\0')
 		{
 			word[number] = '\0';
-
 			printf("%s\n", word);
 
-			for (int k = 0; k < number; k++)
+
+			/*for (int k = 0; k < number; k++)
 			{
 				if (isVowels(word[k]))		printf("%c - ÃËÀÑÍÀ‗\n",	word[k]);
 				if (isConsonants(word[k]))	printf("%c - ÑÎÃËÀÑÍÀ‗\n",	word[k]);
 				if (isSound(word[k]))		printf("%c - Ì‗ÃÊÀ‗\n",		word[k]);
+			}*/
+			for (int i = 0; i < number; i++)
+				if (isVowels(word[i]))
+					counter++;
+			
+			if (counter >= 2)
+			{
+				for (int k = 0; k < number; k++)
+				{
+					if (isConsonants(word[k]) && isSound(word[k + 1]))
+						continue;
+					char mas[] = {'\0'};
+					if (isConsonants(word[i]) && isVowels(word[i + 1] && isConsonants(word[i + 2]) && vowelInTheRemainingPart(word, i + 3)))
+					{
+						for (int i = 0; i < number + 1; i++)
+						{
+							if (i == 3)
+							{
+								mas[i] = '-';
+								continue;
+							}
+							mas[i] = word[i];
+						}
+						printf("%s", mas);
+					}
+
+				}
 			}
+
+			counter = 0;
+
+
+
 			
 
 
