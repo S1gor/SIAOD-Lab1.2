@@ -51,7 +51,56 @@ bool isSounds(char symbol)
 	return flag ? true : false;
 }
 
-void HyphenationWord(char* str)
+void HyphenationWord(char* word)
+{
+	int n = 0, l = 0;
+	while (word[n] != '\0')
+	{
+		if (isVowels(word[n]))
+		{
+			if (isConsonants(word[n + 1]) && isVowels(word[n + 2]))
+			{
+				l = strlen(word) + 1;
+				for (l; l >= n + 1; l--)
+					word[l] = word[l - 1];
+				word[n + 1] = '-';
+				n = n + 2;
+				continue;
+			}
+			if (isConsonants(word[n + 1]) && isConsonants(word[n + 2]) && word[n + 3] != '\0')
+			{
+				l = strlen(word) + 1;
+				for (l; l >= n + 2; l--)
+					word[l] = word[l - 1];
+				word[n + 2] = '-';
+				n = n + 2;
+				continue;
+			}
+			if (isConsonants(word[n + 1]) && isSounds(word[n + 2]) && word[n + 3] != '\0')
+			{
+				l = strlen(word) + 1;
+				for (l; l >= n + 3; l--)
+					word[l] = word[l - 1];
+				word[n + 3] = '-';
+				n = n + 3;
+				continue;
+			}
+			if (isSounds(word[n + 1]) && word[n + 2] != '\0')
+			{
+				l = strlen(word) + 1;
+				for (l; l >= n + 2; l--)
+					word[l] = word[l - 1];
+				word[n + 2] = '-';
+				n = n + 2;
+				continue;
+			}
+		}
+		n++;
+	}
+	printf("%s\n", word);
+}
+
+void DivisionIntoWord(char* str)
 {
 	printf("Слова со знаками переноса:\n");
 
@@ -67,57 +116,12 @@ void HyphenationWord(char* str)
 		{
 			word[number] = '\0';
 
-			int n = 0, l = 0, counter = 0;
+			int counter = 0;
 			for (int i = 0; i < number; i++)
 				if (isVowels(word[i]))
 					counter++;
 			if (counter >= 2)
-			{
-				while (word[n] != '\0')
-				{
-					if (isVowels(word[n]))
-					{
-						if (isConsonants(word[n + 1]) && isVowels(word[n + 2]))
-						{
-							l = strlen(word) + 1;
-							for (l; l >= n + 1; l--)
-								word[l] = word[l - 1];
-							word[n + 1] = '-';
-							n = n + 2;
-							continue;
-						}
-						if (isConsonants(word[n + 1]) && isConsonants(word[n + 2]))
-						{
-							l = strlen(word) + 1;
-							for (l; l >= n + 2; l--)
-								word[l] = word[l - 1];
-							word[n + 2] = '-';
-							n = n + 2;
-							continue;
-						}
-						if (isConsonants(word[n + 1]) && isSounds(word[n + 2]) && word[n + 3] != '\0')
-						{
-							l = strlen(word) + 1;
-							for (l; l >= n + 3; l--)
-								word[l] = word[l - 1];
-							word[n + 3] = '-';
-							n = n + 3;
-							continue;
-						}
-						if (isSounds(word[n + 1]) && word[n + 2] != '\0')
-						{
-							l = strlen(word) + 1;
-							for (l; l >= n + 2; l--)
-								word[l] = word[l - 1];
-							word[n + 2] = '-';
-							n = n + 2;
-							continue;
-						}
-					}
-					n++;
-				}
-				printf("%s\n", word);
-			}
+				HyphenationWord(word);
 
 			for (int j = 0; j < number; j++)
 				word[j] = ' ';
@@ -137,8 +141,7 @@ int main()
 	char filename[] = "1.txt";
 
 	ReadFile(filename, str);
-	HyphenationWord(str);
-	 
+	DivisionIntoWord(str);
 
 	return 0;
 }
